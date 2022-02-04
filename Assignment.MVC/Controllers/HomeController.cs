@@ -1,6 +1,6 @@
-﻿using Assignment.MVC.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Assignment.MVC.Models.ViewModels;
 
 namespace Assignment.MVC.Controllers
 {
