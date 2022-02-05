@@ -1,0 +1,8 @@
+﻿@model ProductVM
+
+@foreach (var item in Model.Products)
+{
+    <p>@item.Name</p>
+    <p>@item.Description</p>
+    <p>@item.Price</p>
+}
