@@ -1,5 +1,6 @@
 ﻿using Assignment.MVC.Models;
 using Assignment.MVC.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -60,6 +61,9 @@ namespace Assignment.MVC.Controllers
 
         public IActionResult SignIn(string returnUrl = null)
         {
+            if (_signInManager.IsSignedIn(User))
+                return RedirectToAction("Index", "Home");
+
             var signInViewModel = new SignInVM();
             if (returnUrl == null)
                 signInViewModel.ReturnUrl = "/";
@@ -90,7 +94,7 @@ namespace Assignment.MVC.Controllers
         #endregion
 
         #region SignOut
-
+        [Authorize]
         public async Task<IActionResult> SignOut()
         {
             if (_signInManager.IsSignedIn(User))

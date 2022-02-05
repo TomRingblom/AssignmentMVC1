@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Assignment.MVC.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Assignment.MVC.Controllers
 {
@@ -17,12 +18,13 @@ namespace Assignment.MVC.Controllers
         {
             return View();
         }
-
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
         }
 
+        [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

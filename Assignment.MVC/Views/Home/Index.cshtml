@@ -1,8 +1,12 @@
-﻿@{
+﻿@inject SignInManager<ApplicationUser> _signInManager
+@{
     ViewData["Title"] = "Välkommen";
 }
 
 <div class="text-center">
     <h1 class="display-4">Välkommen</h1>
-    <p><a asp-controller="Auth" asp-action="SignUp">Registrera dig</a> för att börja handla.</p>
+    @if (!_signInManager.IsSignedIn(User))
+    {
+        <p><a asp-controller="Auth" asp-action="SignUp">Registrera dig</a> för att börja handla.</p>
+    }
 </div>
