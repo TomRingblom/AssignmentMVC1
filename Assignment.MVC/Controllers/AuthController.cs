@@ -16,11 +16,15 @@ namespace Assignment.MVC.Controllers
             _signInManager = signInManager;
         }
 
+        #region SignUp
         public IActionResult SignUp()
         {
+            if (_signInManager.IsSignedIn(User))
+                return RedirectToAction("Index", "Home");
+
             return View();
         }
-
+        
         [HttpPost]
         public async Task<IActionResult> SignUp(SignUpVM model)
         {
@@ -50,5 +54,52 @@ namespace Assignment.MVC.Controllers
             }
             return View();
         }
+        #endregion
+
+        #region SignIn
+
+        public IActionResult SignIn(string returnUrl = null)
+        {
+            var signInViewModel = new SignInVM();
+            if (returnUrl == null)
+                signInViewModel.ReturnUrl = "/";
+            else
+                signInViewModel.ReturnUrl = returnUrl;
+
+            return View(signInViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SignIn(SignInVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: false, false);
+                if (result.Succeeded)
+                {
+                    if (model.ReturnUrl == null || model.ReturnUrl == "/")
+                        return RedirectToAction("Index", "Home");
+                    else
+                        return LocalRedirect(model.ReturnUrl);
+                }
+            }
+            ModelState.AddModelError(string.Empty, "Felaktig e-postadress eller lösenord");
+
+            return View();
+        }
+        #endregion
+
+        #region SignOut
+
+        public async Task<IActionResult> SignOut()
+        {
+            if (_signInManager.IsSignedIn(User))
+                await _signInManager.SignOutAsync();
+
+            return RedirectToAction("Index", "Home");
+        }
+        
+
+        #endregion
     }
 }

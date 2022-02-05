@@ -10,7 +10,7 @@ public class SignUpVM
     public string FirstName { get; set; }
 
     [Display(Name = "Efternamn")]
-    [Required(ErrorMessage = "Du måste ange ett förnamn")]
+    [Required(ErrorMessage = "Du måste ange ett efternamn")]
     [StringLength(50, ErrorMessage = "OBS! Efternamnet måste bestå av minst 2 tecken.", MinimumLength = 2)]
     public string LastName { get; set; }
 
