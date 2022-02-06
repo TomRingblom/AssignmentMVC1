@@ -5,21 +5,6 @@ namespace Assignment.WebApi.Models.Entities;
 
 public class ProductEntity
 {
-    public ProductEntity()
-    {
-        
-    }
-
-    public ProductEntity(int id, string name, string description, double price, int subCategoryId, ICollection<ProductSubCategoryEntity> subCategories)
-    {
-        Id = id;
-        Name = name;
-        Description = description;
-        Price = price;
-        SubCategoryId = subCategoryId;
-        SubCategories = subCategories;
-    }
-
     [Key]
     public int Id { get; set; }
     [Required]

@@ -1,5 +1,6 @@
 ﻿using Assignment.WebApi.Models;
 using Assignment.WebApi.Models.Entities;
+using Assignment.WebApi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,17 +11,16 @@ namespace Assignment.WebApi.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
-
-        public ProductController(ApplicationDbContext context)
+        private readonly IProductService _productService;
+        public ProductController(IProductService productService)
         {
-            _context = context;
+            _productService = productService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductEntity>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<ProductModel>>> GetProducts()
         {
-            return await _context.Products.Include(x => x.SubCategories).ThenInclude(x => x.Category).ToListAsync();
+            return await _productService.GetProductsAsync();
         }
     }
 }
