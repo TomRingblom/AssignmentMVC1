@@ -1,9 +1,9 @@
 ﻿@inject SignInManager<ApplicationUser> _signInManager
 
 <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-dark border-bottom box-shadow">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Assignment.MVC</a>
+                <a class="navbar-brand text-light" asp-area="" asp-controller="Home" asp-action="Index">Assignment.MVC</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -13,25 +13,45 @@
                     {
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Hem</a>
+                                <a class="nav-link text-light" asp-controller="Home" asp-action="Index">Hem</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Produkter</a>
+                                <a class="nav-link text-light" asp-area="" asp-controller="Product" asp-action="Index">Produkter</a>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Datorer
                                 </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <li><a class="dropdown-item" asp-controller="Product" asp-action="Index">Bärbara datorer</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                <ul class="dropdown-menu bg-dark" aria-labelledby="navbarDropdownMenuLink">
+                                    <li><a class="dropdown-item text-light" asp-controller="Product" asp-action="Index" asp-route-input="Bärbara datorer">Bärbara datorer</a></li>
+                                    <li><a class="dropdown-item text-light" asp-controller="Product" asp-action="Index" asp-route-input="Stationära datorer">Stationära datorer</a></li>
+                                    <li><a class="dropdown-item text-light" asp-controller="Product" asp-action="Index" asp-route-input="Surfplattor">Surfplattor</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Nätverk
+                                </a>
+                                <ul class="dropdown-menu bg-dark" aria-labelledby="navbarDropdownMenuLink">
+                                    <li><a class="dropdown-item text-light" asp-controller="Product" asp-action="Index" asp-route-input="Trådlöst nätverk">Trådlöst nätverk</a></li>
+                                    <li><a class="dropdown-item text-light" asp-controller="Product" asp-action="Index" asp-route-input="Nätverksswitchar">Nätverksswitchar</a></li>
+                                    <li><a class="dropdown-item text-light" asp-controller="Product" asp-action="Index" asp-route-input="Routrar och tillbehör">Routrar och tillbehör</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Datorkomponenter
+                                </a>
+                                <ul class="dropdown-menu bg-dark" aria-labelledby="navbarDropdownMenuLink">
+                                    <li><a class="dropdown-item text-light" asp-controller="Product" asp-action="Index" asp-route-input="Grafikkort">Grafikkort</a></li>
+                                    <li><a class="dropdown-item text-light" asp-controller="Product" asp-action="Index" asp-route-input="Datorchassin">Datorchassin</a></li>
+                                    <li><a class="dropdown-item text-light" asp-controller="Product" asp-action="Index" asp-route-input="Processorer">Processorer</a></li>
                                 </ul>
                             </li>
                         </ul>
                         <ul class="navbar-nav d-flex justify-content-end">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="SignOut">Logga ut</a>
+                                <a class="nav-link text-light" asp-area="" asp-controller="Auth" asp-action="SignOut">Logga ut</a>
                             </li>
                         </ul>
 
@@ -40,10 +60,10 @@
                     {
                         <ul class="navbar-nav justify-content-end flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Auth" asp-action="SignUp">Registrera</a>
+                                <a class="nav-link text-light" asp-controller="Auth" asp-action="SignUp">Registrera</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Auth" asp-action="SignIn">Logga in</a>
+                                <a class="nav-link text-light" asp-controller="Auth" asp-action="SignIn">Logga in</a>
                             </li>
                         </ul>
                     }
