@@ -23,7 +23,7 @@ namespace Assignment.WebApi.Controllers
             var products = new List<ProductModel>();
             foreach (var item in await _context.Products.Include(x => x.SubCategory).ThenInclude(c => c.Category).ToArrayAsync())
             {
-                products.Add(new ProductModel(item.Id, item.Name, item.Description, item.Price, item.SubCategory.Category.Name, item.SubCategory.Name));
+                products.Add(new ProductModel(item.Id, item.Name, item.Description, item.Price, item.SubCategoryId, item.SubCategory.Category.Name, item.SubCategory.Name));
             }
             return Ok(products);
         }
@@ -31,65 +31,65 @@ namespace Assignment.WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<ProductModel>>> GetProduct(int id)
         {
-            var findProduct = await _context.Products.Include(x => x.SubCategory)
+            var product = await _context.Products.Include(x => x.SubCategory)
                 .ThenInclude(c => c.Category)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            if (findProduct == null)
+            if (product == null)
                 return NotFound();
 
-            return Ok(new ProductModel(findProduct.Id, findProduct.Name, findProduct.Description, findProduct.Price, findProduct.SubCategory.Category.Name, findProduct.SubCategory.Name));
+            return Ok(new ProductModel(product.Id, product.Name, product.Description, product.Price, product.SubCategoryId, product.SubCategory.Category.Name, product.SubCategory.Name));
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(int id, UpdateProductModel product)
+        public async Task<IActionResult> UpdateProduct(int id, UpdateProductModel model)
         {
-            if (!ModelState.IsValid  || id != product.Id)
+            if (!ModelState.IsValid  || id != model.Id)
                 return BadRequest();
 
-            var findProduct = await _context.Products.FindAsync(id);
-            if (findProduct == null)
+            var productToUpdate = await _context.Products.FindAsync(id);
+            if (productToUpdate == null)
                 return NotFound();
 
-            findProduct.Name = product.Name;
-            findProduct.Description = product.Description;
-            findProduct.Price = product.Price;
-            findProduct.SubCategoryId = product.SubCategoryId;
+            productToUpdate.Name = model.Name;
+            productToUpdate.Description = model.Description;
+            productToUpdate.Price = model.Price;
+            productToUpdate.SubCategoryId = model.SubCategoryId;
 
-            _context.Entry(findProduct).State = EntityState.Modified;
+            _context.Entry(productToUpdate).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return Ok();
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProductEntity>> CreateProduct(CreateProductModel product)
+        public async Task<ActionResult<ProductEntity>> CreateProduct(CreateProductModel model)
         {
             if (ModelState.IsValid)
             {
-                var subCategory = await _context.ProductSubCategories.FindAsync(product.SubCategoryId);
+                var subCategory = await _context.SubCategories.FindAsync(model.SubCategoryId);
                 if (subCategory == null)
                     return new BadRequestObjectResult(new ErrorMessage { StatusCode = 400, Error = "Invalid or no subcategory id provided." });
 
-                var createProduct = new ProductEntity(product.Name, product.Description, product.Price, product.SubCategoryId);
+                var createProduct = new ProductEntity(model.Name, model.Description, model.Price, model.SubCategoryId);
                 _context.Products.Add(createProduct);
                 await _context.SaveChangesAsync();
 
                 var addedProduct = await _context.Products.Include(x => x.SubCategory.Category).FirstOrDefaultAsync(x => x.Id == createProduct.Id);
 
-                return CreatedAtAction("GetProduct", new { id = createProduct.Id }, new ProductModel(addedProduct.Id, addedProduct.Name, addedProduct.Description, addedProduct.Price, addedProduct.SubCategory.Category.Name, addedProduct.SubCategory.Name));
+                return CreatedAtAction("GetProduct", new { id = createProduct.Id }, new ProductModel(addedProduct.Id, addedProduct.Name, addedProduct.Description, addedProduct.Price, addedProduct.SubCategoryId, addedProduct.SubCategory.Category.Name, addedProduct.SubCategory.Name));
             }
 
             return BadRequest();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProductEntity(int id)
+        public async Task<IActionResult> DeleteProduct(int id)
         {
-            var findProductToDelete = await _context.Products.FindAsync(id);
-            if (findProductToDelete == null)
+            var productToDelete = await _context.Products.FindAsync(id);
+            if (productToDelete == null)
                 return NotFound();
 
-            _context.Products.Remove(findProductToDelete);
+            _context.Products.Remove(productToDelete);
             await _context.SaveChangesAsync();
 
             return NoContent();

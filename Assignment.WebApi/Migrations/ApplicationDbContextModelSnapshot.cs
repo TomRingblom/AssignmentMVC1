@@ -21,7 +21,7 @@ namespace Assignment.WebApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Assignment.WebApi.Models.Entities.ProductCategoryEntity", b =>
+            modelBuilder.Entity("Assignment.WebApi.Models.Entities.CategoryEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -36,7 +36,10 @@ namespace Assignment.WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductCategories");
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Assignment.WebApi.Models.Entities.ProductEntity", b =>
@@ -69,7 +72,7 @@ namespace Assignment.WebApi.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Assignment.WebApi.Models.Entities.ProductSubCategoryEntity", b =>
+            modelBuilder.Entity("Assignment.WebApi.Models.Entities.SubCategoryEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -89,12 +92,12 @@ namespace Assignment.WebApi.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("ProductSubCategories");
+                    b.ToTable("SubCategories");
                 });
 
             modelBuilder.Entity("Assignment.WebApi.Models.Entities.ProductEntity", b =>
                 {
-                    b.HasOne("Assignment.WebApi.Models.Entities.ProductSubCategoryEntity", "SubCategory")
+                    b.HasOne("Assignment.WebApi.Models.Entities.SubCategoryEntity", "SubCategory")
                         .WithMany()
                         .HasForeignKey("SubCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -103,9 +106,9 @@ namespace Assignment.WebApi.Migrations
                     b.Navigation("SubCategory");
                 });
 
-            modelBuilder.Entity("Assignment.WebApi.Models.Entities.ProductSubCategoryEntity", b =>
+            modelBuilder.Entity("Assignment.WebApi.Models.Entities.SubCategoryEntity", b =>
                 {
-                    b.HasOne("Assignment.WebApi.Models.Entities.ProductCategoryEntity", "Category")
+                    b.HasOne("Assignment.WebApi.Models.Entities.CategoryEntity", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)

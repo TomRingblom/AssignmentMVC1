@@ -29,5 +29,5 @@ public class ProductEntity
     public double Price { get; set; }
     [Required]
     public int SubCategoryId { get; set; }
-    public ProductSubCategoryEntity SubCategory { get; set; }
+    public SubCategoryEntity SubCategory { get; set; }
 }

@@ -9,6 +9,6 @@ public class ApplicationDbContext : DbContext
     {}
     
     public DbSet<ProductEntity> Products { get; set; }
-    public DbSet<ProductCategoryEntity> ProductCategories { get; set; }
-    public DbSet<ProductSubCategoryEntity> ProductSubCategories { get; set; }
+    public DbSet<CategoryEntity> Categories { get; set; }
+    public DbSet<SubCategoryEntity> SubCategories { get; set; }
 }
