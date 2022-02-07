@@ -1,7 +1,7 @@
 ﻿using Assignment.WebApi.Models;
-using Assignment.WebApi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Assignment.WebApi.Controllers
 {
@@ -9,18 +9,23 @@ namespace Assignment.WebApi.Controllers
     [ApiController]
     public class SubCategoryController : ControllerBase
     {
-        private readonly ISubCategoryService _subCategoryService;
+        private readonly ApplicationDbContext _context;
 
-        public SubCategoryController(ISubCategoryService subCategoryService)
+        public SubCategoryController(ApplicationDbContext context)
         {
-            _subCategoryService = subCategoryService;
+            _context = context;
         }
-
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SubCategoryModel>>> GetSubCategories()
         {
-            return await _subCategoryService.GetSubCategoriesAsync();
+            var categories = new List<SubCategoryModel>();
+            foreach (var item in await _context.ProductSubCategories.ToListAsync())
+            {
+                categories.Add(new SubCategoryModel(item.Id, item.Name));
+            }
+
+            return Ok(categories);
         }
     }
 }

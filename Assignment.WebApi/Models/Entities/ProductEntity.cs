@@ -5,6 +5,18 @@ namespace Assignment.WebApi.Models.Entities;
 
 public class ProductEntity
 {
+    public ProductEntity()
+    {
+        
+    }
+
+    public ProductEntity(string name, string description, double price, int subCategoryId)
+    {
+        Name = name;
+        Description = description;
+        Price = price;
+        SubCategoryId = subCategoryId;
+    }
     [Key]
     public int Id { get; set; }
     [Required]
@@ -17,5 +29,5 @@ public class ProductEntity
     public double Price { get; set; }
     [Required]
     public int SubCategoryId { get; set; }
-    public ICollection<ProductSubCategoryEntity> SubCategories { get; set; }
+    public ProductSubCategoryEntity SubCategory { get; set; }
 }

@@ -64,6 +64,8 @@ namespace Assignment.WebApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("SubCategoryId");
+
                     b.ToTable("Products");
                 });
 
@@ -90,50 +92,26 @@ namespace Assignment.WebApi.Migrations
                     b.ToTable("ProductSubCategories");
                 });
 
-            modelBuilder.Entity("ProductEntityProductSubCategoryEntity", b =>
+            modelBuilder.Entity("Assignment.WebApi.Models.Entities.ProductEntity", b =>
                 {
-                    b.Property<int>("ProductsId")
-                        .HasColumnType("int");
+                    b.HasOne("Assignment.WebApi.Models.Entities.ProductSubCategoryEntity", "SubCategory")
+                        .WithMany()
+                        .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<int>("SubCategoriesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductsId", "SubCategoriesId");
-
-                    b.HasIndex("SubCategoriesId");
-
-                    b.ToTable("ProductEntityProductSubCategoryEntity");
+                    b.Navigation("SubCategory");
                 });
 
             modelBuilder.Entity("Assignment.WebApi.Models.Entities.ProductSubCategoryEntity", b =>
                 {
                     b.HasOne("Assignment.WebApi.Models.Entities.ProductCategoryEntity", "Category")
-                        .WithMany("SubCategories")
+                        .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("ProductEntityProductSubCategoryEntity", b =>
-                {
-                    b.HasOne("Assignment.WebApi.Models.Entities.ProductEntity", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Assignment.WebApi.Models.Entities.ProductSubCategoryEntity", null)
-                        .WithMany()
-                        .HasForeignKey("SubCategoriesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Assignment.WebApi.Models.Entities.ProductCategoryEntity", b =>
-                {
-                    b.Navigation("SubCategories");
                 });
 #pragma warning restore 612, 618
         }

@@ -9,5 +9,5 @@ public class ProductCategoryEntity
     [Required]
     [StringLength(50)]
     public string Name { get; set; }
-    public ICollection<ProductSubCategoryEntity> SubCategories { get; set; }
+    //public ICollection<ProductSubCategoryEntity> SubCategories { get; set; }
 }

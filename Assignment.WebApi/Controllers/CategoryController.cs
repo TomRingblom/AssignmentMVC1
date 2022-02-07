@@ -1,7 +1,7 @@
 ﻿using Assignment.WebApi.Models;
-using Assignment.WebApi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Assignment.WebApi.Controllers
 {
@@ -9,17 +9,23 @@ namespace Assignment.WebApi.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly ICategoryService _categoryService;
+        private readonly ApplicationDbContext _context;
 
-        public CategoryController(ICategoryService categoryService)
+        public CategoryController(ApplicationDbContext context)
         {
-            _categoryService = categoryService;
+            _context = context;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CategoryModel>>> GetCategories()
         {
-            return await _categoryService.GetCategoriesAsync();
+            var categories = new List<CategoryModel>();
+            foreach (var item in await _context.ProductCategories.ToListAsync())
+            {
+                categories.Add(new CategoryModel(item.Id, item.Name));
+            }
+
+            return categories;
         }
     }
 }

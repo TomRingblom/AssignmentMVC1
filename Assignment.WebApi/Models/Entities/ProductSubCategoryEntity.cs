@@ -12,5 +12,5 @@ public class ProductSubCategoryEntity
     [Required]
     public int CategoryId { get; set; }
     public ProductCategoryEntity Category { get; set; }
-    public ICollection<ProductEntity> Products { get; set; }
+    //public ICollection<ProductEntity> Products { get; set; }
 }

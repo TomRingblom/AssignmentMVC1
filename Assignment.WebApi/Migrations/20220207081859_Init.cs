@@ -4,7 +4,7 @@
 
 namespace Assignment.WebApi.Migrations
 {
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,22 +19,6 @@ namespace Assignment.WebApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductCategories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
-                    Price = table.Column<decimal>(type: "money", nullable: false),
-                    SubCategoryId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -58,33 +42,31 @@ namespace Assignment.WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductEntityProductSubCategoryEntity",
+                name: "Products",
                 columns: table => new
                 {
-                    ProductsId = table.Column<int>(type: "int", nullable: false),
-                    SubCategoriesId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    Price = table.Column<decimal>(type: "money", nullable: false),
+                    SubCategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductEntityProductSubCategoryEntity", x => new { x.ProductsId, x.SubCategoriesId });
+                    table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductEntityProductSubCategoryEntity_Products_ProductsId",
-                        column: x => x.ProductsId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductEntityProductSubCategoryEntity_ProductSubCategories_SubCategoriesId",
-                        column: x => x.SubCategoriesId,
+                        name: "FK_Products_ProductSubCategories_SubCategoryId",
+                        column: x => x.SubCategoryId,
                         principalTable: "ProductSubCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductEntityProductSubCategoryEntity_SubCategoriesId",
-                table: "ProductEntityProductSubCategoryEntity",
-                column: "SubCategoriesId");
+                name: "IX_Products_SubCategoryId",
+                table: "Products",
+                column: "SubCategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductSubCategories_CategoryId",
@@ -94,9 +76,6 @@ namespace Assignment.WebApi.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "ProductEntityProductSubCategoryEntity");
-
             migrationBuilder.DropTable(
                 name: "Products");
 
