@@ -11,4 +11,5 @@ public class ApplicationDbContext : DbContext
     public DbSet<ProductEntity> Products { get; set; }
     public DbSet<CategoryEntity> Categories { get; set; }
     public DbSet<SubCategoryEntity> SubCategories { get; set; }
+    public DbSet<ShoppingCartEntity> ShoppingCarts { get; set; }
 }
