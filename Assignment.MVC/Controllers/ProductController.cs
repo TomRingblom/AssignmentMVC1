@@ -22,18 +22,19 @@ namespace Assignment.MVC.Controllers
             return View(viewModel);
         }
 
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(int? id)
         {
             var viewModel = new ProductVM();
+            viewModel.Product = new ProductModel();
 
-            if (id == null || id == "0")
+            if (id == null || id == 0)
             {
                 return NotFound();
             }
 
             using (var client = new HttpClient())
             {
-                viewModel = await client.GetFromJsonAsync<ProductModel>("https://localhost:7158/api/Product/" + $"{id}");
+                viewModel.Product = await client.GetFromJsonAsync<ProductModel>("https://localhost:7158/api/Product/" + $"{id}");
             }
 
             return View(viewModel);

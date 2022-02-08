@@ -1,15 +1,13 @@
 ﻿@model ProductVM
 
 <div class="row justify-content-center align-items-center">
-    @foreach (var item in Model.Products)
-    {
         <div class="card w-75 mt-3">
             <div class="card-body">
-                <h5 class="card-title"><a asp-controller="">@item.Name</a></h5>
-                <p class="card-text">@item.Description</p>
-                <p class="card-text">@item.Price kr</p>
+                <h5 class="card-title"><a asp-controller="">@Model.Product.Name</a></h5>
+                <p class="card-text">@Model.Product.Description</p>
+                <p class="card-text">@Model.Product.Price kr</p>
                 <a href="#" class="btn btn-dark">Lägg i kundvagn</a>
             </div>
         </div>
-    }
+    
 </div>
