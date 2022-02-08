@@ -30,14 +30,14 @@ namespace Assignment.WebApi.Controllers
         //}
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<ShoppingCartModel>>> GetShoppingCart(int id)
+        public async Task<ActionResult<IEnumerable<ShoppingCartModel>>> GetShoppingCart(string id)
         {
-            var shoppinCart = await _context.ShoppingCarts.FirstOrDefaultAsync(x => x.Id == id);
+            var shoppinCart = await _context.ShoppingCarts.FirstOrDefaultAsync(x => x.UserId == id);
 
             if (shoppinCart == null)
                 return NotFound();
 
-            return Ok(new ShoppingCartModel(shoppinCart.Id, shoppinCart.ProductId, shoppinCart.Count, shoppinCart.UserId));
+            return Ok(shoppinCart);
         }
 
         //[HttpPut("{id}")]
@@ -62,13 +62,13 @@ namespace Assignment.WebApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                var createShoppingCart = new ShoppingCartEntity(model.ProductId, model.Count, model.UserId);
+                var createShoppingCart = new ShoppingCartEntity(model.ProductId, model.Count, model.UserId, model.Price);
                 _context.ShoppingCarts.Add(createShoppingCart);
                 await _context.SaveChangesAsync();
 
                 var addedShoppingCart = await _context.ShoppingCarts.FirstOrDefaultAsync(x => x.Id == createShoppingCart.Id);
 
-                return CreatedAtAction("GetShoppingCart", new { id = createShoppingCart.Id }, new ShoppingCartModel(addedShoppingCart.Id, addedShoppingCart.ProductId, addedShoppingCart.Count, addedShoppingCart.UserId));
+                return CreatedAtAction("GetShoppingCart", new { id = createShoppingCart.Id }, new ShoppingCartModel(addedShoppingCart.Id, addedShoppingCart.ProductId, addedShoppingCart.Count, addedShoppingCart.UserId, addedShoppingCart.Price));
             }
 
             return BadRequest();

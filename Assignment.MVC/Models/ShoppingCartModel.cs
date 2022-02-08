@@ -1,6 +1,6 @@
-﻿namespace Assignment.WebApi.Models;
+﻿namespace Assignment.MVC.Models;
 
-public class CreateShoppingCartModel
+public class ShoppingCartModel
 {
     public int ProductId { get; set; }
     public int Count { get; set; }

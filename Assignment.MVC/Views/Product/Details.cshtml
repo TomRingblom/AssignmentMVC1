@@ -1,13 +1,19 @@
-﻿@model ProductVM
+﻿@model ProductDetailsModel
 
-<div class="row justify-content-center align-items-center">
+<form method="post">
+    <input hidden asp-for="Product.Id"/>
+    <input hidden asp-for="@Model.UserId"/>
+    <input hidden asp-for="@Model.Product.Name"/>
+    <input hidden asp-for="@Model.Product.Description"/>
+    <input hidden asp-for="@Model.Product.Price"/>
+    <div class="row justify-content-center align-items-center">
         <div class="card w-75 mt-3">
             <div class="card-body">
-                <h5 class="card-title"><a asp-controller="">@Model.Product.Name</a></h5>
+                <h5 class="card-title">@Model.Product.Name</h5>
                 <p class="card-text">@Model.Product.Description</p>
                 <p class="card-text">@Model.Product.Price kr</p>
-                <a href="#" class="btn btn-dark">Lägg i kundvagn</a>
+                <button type="submit" class="btn btn-dark" asp-controller="Product" asp-action="Details">Lägg i kundvagn</button>
             </div>
         </div>
-    
-</div>
+    </div>
+</form>

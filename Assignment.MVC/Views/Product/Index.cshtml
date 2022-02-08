@@ -6,9 +6,9 @@
     <input hidden value="@item.Id"/>
     <div class="card w-75 mt-3">
         <div class="card-body">
-            <h5 class="card-title"><a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id">@item.Name</a></h5>
+            <h5 class="card-title">@item.Name</h5>
             <p class="card-text">@item.Price kr</p>
-            <a href="#" class="btn btn-dark">Lägg i kundvagn</a>
+            <a asp-controller="Product" asp-action="Details" asp-route-productId="@item.Id" class="btn btn-dark">Mer info</a>
         </div>
     </div>
 }
