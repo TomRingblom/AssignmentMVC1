@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Net;
+using System.Security.Claims;
 using Assignment.MVC.Models;
 using Assignment.MVC.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -56,11 +57,46 @@ namespace Assignment.MVC.Controllers
 
             using (var client = new HttpClient())
             {
-                //viewModel.ListCart = await client.GetFromJsonAsync<IEnumerable<ShoppingCartModel>>("https://localhost:7158/api/ShoppingCart/" + $"{model.UserId}");
-                await client.PostAsJsonAsync("https://localhost:7158/api/ShoppingCart", viewModel);
+                var responseTask = client.GetAsync("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.UserId}" + $"?productId={viewModel.ProductId}");
+                //responseTask.Wait();
+
+                var result = responseTask.Result;
+
+                if (result.StatusCode == HttpStatusCode.NoContent)
+                {
+                    await client.PostAsJsonAsync("https://localhost:7158/api/ShoppingCart", viewModel);
+
+                    
+                }
+                else //web api sent error response 
+                {
+                    //log response status here..
+
+                    var cartFromApi = new ShoppingCartDetailsModel();
+                    cartFromApi.ShoppingCart = await client.GetFromJsonAsync<ShoppingCartModel>("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.UserId}" + $"?productId={viewModel.ProductId}");
+                    viewModel.Count = IncrementCount(cartFromApi.ShoppingCart, viewModel.Count);
+                    viewModel.Id = cartFromApi.ShoppingCart.Id;
+                    await client.PutAsJsonAsync("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.Id}", viewModel);
+                }
+
+                //var cartFromApi = new ShoppingCartDetailsModel();
+                //cartFromApi.ShoppingCart = new ShoppingCartModel();
+                //cartFromApi.ShoppingCart = await client.GetFromJsonAsync<ShoppingCartModel>("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.UserId}" + $"?productId={viewModel.ProductId}");
+                
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
+        }
+        public int IncrementCount(ShoppingCartModel shoppingCart, int count)
+        {
+            shoppingCart.Count += count;
+            return shoppingCart.Count;
+        }
+
+        public int DecrementCount(ShoppingCartModel shoppingCart, int count)
+        {
+            shoppingCart.Count -= count;
+            return shoppingCart.Count;
         }
     }
 }

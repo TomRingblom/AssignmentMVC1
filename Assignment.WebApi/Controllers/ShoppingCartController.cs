@@ -17,45 +17,63 @@ namespace Assignment.WebApi.Controllers
             _context = context;
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Shopp>>> GetCategories()
-        //{
-        //    var categories = new List<CategoryModel>();
-        //    foreach (var item in await _context.Categories.ToListAsync())
-        //    {
-        //        categories.Add(new CategoryModel(item.Id, item.Name));
-        //    }
-
-        //    return categories;
-        //}
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<ShoppingCartModel>>> GetShoppingCart(string id)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ShoppingCartModel>>> GetShoppingCarts()
         {
-            var shoppinCart = await _context.ShoppingCarts.FirstOrDefaultAsync(x => x.UserId == id);
+            var categories = new List<ShoppingCartModel>();
+            foreach (var item in await _context.ShoppingCarts.ToListAsync())
+            {
+                categories.Add(new ShoppingCartModel(item.ProductId, item.Count, item.UserId, item.Price));
+            }
 
-            if (shoppinCart == null)
-                return NotFound();
-
-            return Ok(shoppinCart);
+            return categories;
         }
 
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> UpdateShoppingCart(int id, UpdateCategoryModel model)
-        //{
-        //    if (!ModelState.IsValid || id != model.Id)
-        //        return BadRequest();
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<ShoppingCartModel>>> GetShoppingCart(string id, int? productId)
+        {
+            
+            if (productId == null)
+            {
+                var shoppinCart = new List<ShoppingCartModel>();
+                foreach (var item in await _context.ShoppingCarts.Where(x => x.UserId == id).ToListAsync())
+                {
+                    shoppinCart.Add(new ShoppingCartModel(item.ProductId, item.Count, item.UserId, item.Price));
+                }
+                if (shoppinCart == null)
+                    return NoContent();
 
-        //    var findCategory = await _context.Categories.FindAsync(id);
-        //    if (findCategory == null)
-        //        return NotFound();
+                return Ok(shoppinCart);
+            }
+            else
+            {
+                var shoppinCart = new ShoppingCartEntity();
+                shoppinCart = await _context.ShoppingCarts.FirstOrDefaultAsync(x => x.UserId == id && x.ProductId == productId);
+                if (shoppinCart == null)
+                    return NoContent();
 
-        //    findCategory.Name = model.Name;
+                return Ok(shoppinCart);
+            }
 
-        //    _context.Entry(findCategory).State = EntityState.Modified;
-        //    await _context.SaveChangesAsync();
-        //    return Ok();
-        //}
+            
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateShoppingCart(int id, UpdateShoppingCartModel model)
+        {
+            if (!ModelState.IsValid || id != model.Id)
+                return BadRequest();
+
+            var shoppingCart = await _context.ShoppingCarts.FindAsync(id);
+            if (shoppingCart == null)
+                return NotFound();
+
+            shoppingCart.Count = model.Count;
+
+            _context.Entry(shoppingCart).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
 
         [HttpPost]
         public async Task<ActionResult<ShoppingCartEntity>> CreateShoppingCart(CreateShoppingCartModel model)

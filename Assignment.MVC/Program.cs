@@ -18,6 +18,12 @@ builder.Services.ConfigureApplicationCookie(x =>
     x.LoginPath = "/Auth/SignIn";
 });
 
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+{
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+    options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

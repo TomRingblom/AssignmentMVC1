@@ -7,6 +7,14 @@ public class ShoppingCartModel
         
     }
 
+    public ShoppingCartModel(int productId, int count, string userId, double price)
+    {
+        ProductId = productId;
+        Count = count;
+        UserId = userId;
+        Price = price;
+    }
+
     public ShoppingCartModel(int id, int productId, int count, string userId, double price)
     {
         Id = id;
