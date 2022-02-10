@@ -1,5 +1,6 @@
 ﻿using Assignment.WebApi.Models;
 using Assignment.WebApi.Models.Entities;
+using Assignment.WebApi.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -35,15 +36,16 @@ namespace Assignment.WebApi.Controllers
             
             if (productId == null)
             {
-                var shoppinCart = new List<ShoppingCartModel>();
-                foreach (var item in await _context.ShoppingCarts.Where(x => x.UserId == id).ToListAsync())
+                var shoppingCart = new ShoppingCartVM();
+                shoppingCart.ListCart = new List<ShoppingCartModel>();
+                foreach (var item in await _context.ShoppingCarts.Include(x => x.ProductEntity).Where(x => x.UserId == id).ToListAsync())
                 {
-                    shoppinCart.Add(new ShoppingCartModel(item.ProductId, item.Count, item.UserId, item.Price));
+                    shoppingCart.ListCart.Add(new ShoppingCartModel(item.ProductId, item.Count, item.UserId, item.Price));
                 }
-                if (shoppinCart == null)
+                if (shoppingCart == null)
                     return NoContent();
 
-                return Ok(shoppinCart);
+                return Ok(shoppingCart);
             }
             else
             {

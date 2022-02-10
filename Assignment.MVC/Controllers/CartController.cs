@@ -34,7 +34,7 @@ namespace Assignment.MVC.Controllers
                     
                     foreach (var item in viewModel.ListCart)
                     {
-                        viewModel.Product = await client.GetFromJsonAsync<ProductModel>("https://localhost:7158/api/Product/" + $"{item.Id}");
+                        //viewModel.Product = await client.GetFromJsonAsync<ProductModel>("https://localhost:7158/api/Product/" + $"{item.Id}");
                     }
                 }
                 return View(viewModel);

@@ -1,4 +1,7 @@
-﻿namespace Assignment.WebApi.Models.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+
+namespace Assignment.WebApi.Models.Entities
 {
     public class ShoppingCartEntity
     {
@@ -16,7 +19,11 @@
         }
 
         public int Id { get; set; }
+        
         public int ProductId { get; set; }
+        [ForeignKey("ProductId")]
+        [ValidateNever]
+        public ProductEntity ProductEntity { get; set; }
         public int Count { get; set; }
         public string UserId { get; set; }
         public double Price { get; set; }
