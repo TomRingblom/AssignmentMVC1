@@ -45,7 +45,7 @@ namespace Assignment.WebApi.Controllers
 
                 foreach (var item in products)
                 {
-                    shoppingCart.Add(new ShoppingCartDetailsModel(item.Product.Id, item.Product.Name, item.Product.Price, item.Cart.Count));
+                    shoppingCart.Add(new ShoppingCartDetailsModel(item.Cart.Id, item.Product.Id, item.Product.Name, item.Product.Price, item.Cart.Count));
                 }
                 if (shoppingCart == null)
                     return NoContent();
@@ -78,6 +78,29 @@ namespace Assignment.WebApi.Controllers
             shoppingCart.Count = model.Count;
 
             _context.Entry(shoppingCart).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpPut("AddOneToCart")]
+        public async Task<IActionResult> AddOneToCart(int id)
+        {
+            var addOneToCart = await _context.ShoppingCarts.FindAsync(id);
+            addOneToCart.Count += 1;
+            _context.Entry(addOneToCart).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+        [HttpPut("SubOneToCart")]
+        public async Task<IActionResult> SubOneToCart(int id)
+        {
+            var addOneToCart = await _context.ShoppingCarts.FindAsync(id);
+            addOneToCart.Count -= 1;
+            _context.Entry(addOneToCart).State = EntityState.Modified;
+            if (addOneToCart.Count == 0)
+            {
+                _context.Remove(addOneToCart);
+            }
             await _context.SaveChangesAsync();
             return Ok();
         }

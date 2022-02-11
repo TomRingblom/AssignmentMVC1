@@ -3,23 +3,23 @@
 <div class="row justify-content-center align-items-center">
     <div class="card w-100 mt-3">
         <div class="card-body">
-        @foreach (var item in Model.ListCart)
-        {
+            @foreach (var item in Model.ListCart)
+            {
+                <ul class="list-group list-group-horizontal mt-3">
+                    <li class="list-group-item">Artikelnummer: @item.ProductId</li>
+                    <li class="list-group-item">Antal: @item.Count 
+                        <a asp-action="Sub" asp-route-cartId="@item.CartId"><i class="bi bi-dash-circle"></i></a> 
+                        <a asp-action="Add" asp-route-cartId="@item.CartId"><i class="bi bi-plus-circle"></i></a>
+                    </li>
+                    <li class="list-group-item">Pris: @item.Price kr/st</li>
+                    <li class="list-group-item">Produktnamn: @item.Name</li>
+                </ul>
+
+            }
             <ul class="list-group list-group-horizontal mt-3">
-                <li class="list-group-item">Artikelnummer: @item.ProductId</li>
-                <li class="list-group-item">Antal: @item.Count <a><i class="bi bi-dash-circle"></i></a> <a><i class="bi bi-plus-circle"></i></a> </li>
-                <li class="list-group-item">Pris: @item.Price kr/st</li>
-                <li class="list-group-item">Produktnamn: @item.Name</li>
+                <li class="list-group-item">Totalsumma: @Model.CartTotal kr</li>
             </ul>
-
-        }
-
-
-        <h5 class="card-title"></h5>
-        <ul class="list-group list-group-horizontal mt-3">
-            <li class="list-group-item">Totalsumma: @Model.CartTotal kr</li>
-        </ul>
-        <button class="btn btn-primary mt-3">Beställ</button>
+            <button class="btn btn-primary mt-3">Beställ</button>
+        </div>
     </div>
-</div>
 </div>
