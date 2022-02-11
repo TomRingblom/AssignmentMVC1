@@ -58,30 +58,21 @@ namespace Assignment.MVC.Controllers
             using (var client = new HttpClient())
             {
                 var responseTask = client.GetAsync("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.UserId}" + $"?productId={viewModel.ProductId}");
-                //responseTask.Wait();
 
                 var result = responseTask.Result;
 
                 if (result.StatusCode == HttpStatusCode.NoContent)
                 {
                     await client.PostAsJsonAsync("https://localhost:7158/api/ShoppingCart", viewModel);
-
-                    
                 }
-                else //web api sent error response 
+                else 
                 {
-                    //log response status here..
-
-                    var cartFromApi = new ShoppingCartDetailsModel();
-                    cartFromApi.ShoppingCart = await client.GetFromJsonAsync<ShoppingCartModel>("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.UserId}" + $"?productId={viewModel.ProductId}");
-                    viewModel.Count = IncrementCount(cartFromApi.ShoppingCart, viewModel.Count);
-                    viewModel.Id = cartFromApi.ShoppingCart.Id;
+                    var cartFromApi = new ShoppingCartModel();
+                    cartFromApi = await client.GetFromJsonAsync<ShoppingCartModel>("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.UserId}" + $"?productId={viewModel.ProductId}");
+                    viewModel.Count = IncrementCount(cartFromApi, viewModel.Count);
+                    viewModel.Id = cartFromApi.Id;
                     await client.PutAsJsonAsync("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.Id}", viewModel);
                 }
-
-                //var cartFromApi = new ShoppingCartDetailsModel();
-                //cartFromApi.ShoppingCart = new ShoppingCartModel();
-                //cartFromApi.ShoppingCart = await client.GetFromJsonAsync<ShoppingCartModel>("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.UserId}" + $"?productId={viewModel.ProductId}");
                 
             }
 

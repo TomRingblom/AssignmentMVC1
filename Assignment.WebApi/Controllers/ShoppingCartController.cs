@@ -36,11 +36,16 @@ namespace Assignment.WebApi.Controllers
             
             if (productId == null)
             {
-                var shoppingCart = new ShoppingCartVM();
-                shoppingCart.ListCart = new List<ShoppingCartModel>();
-                foreach (var item in await _context.ShoppingCarts.Include(x => x.ProductEntity).Where(x => x.UserId == id).ToListAsync())
+                var shoppingCart = new List<ShoppingCartDetailsModel>();
+                var products = from product in _context.Products
+                    join shopp in _context.ShoppingCarts on product.Id equals shopp.ProductId
+                    where shopp.UserId == id
+                    select new {Product = product, Cart = shopp};
+
+
+                foreach (var item in products)
                 {
-                    shoppingCart.ListCart.Add(new ShoppingCartModel(item.ProductId, item.Count, item.UserId, item.Price));
+                    shoppingCart.Add(new ShoppingCartDetailsModel(item.Product.Id, item.Product.Name, item.Product.Price, item.Cart.Count));
                 }
                 if (shoppingCart == null)
                     return NoContent();

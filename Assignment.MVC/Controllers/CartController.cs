@@ -16,11 +16,10 @@ namespace Assignment.MVC.Controllers
                 var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
                 var viewModel = new ShoppingCartVM();
-                viewModel.ListCart = new List<ShoppingCartModel>();
+                viewModel.ListCart = new List<ShoppingCartDetailsModel>();
                 viewModel.UserId = claim.Value;
 
                 var responseTask = client.GetAsync("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.UserId}");
-                //responseTask.Wait();
 
                 var result = responseTask.Result;
 
@@ -30,11 +29,10 @@ namespace Assignment.MVC.Controllers
                 }
                 else
                 {
-                    viewModel.ListCart = await client.GetFromJsonAsync<IEnumerable<ShoppingCartModel>>("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.UserId}");
-                    
-                    foreach (var item in viewModel.ListCart)
+                    viewModel.ListCart = await client.GetFromJsonAsync<IEnumerable<ShoppingCartDetailsModel>>("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.UserId}");
+                    foreach (var price in viewModel.ListCart)
                     {
-                        //viewModel.Product = await client.GetFromJsonAsync<ProductModel>("https://localhost:7158/api/Product/" + $"{item.Id}");
+                        viewModel.CartTotal += price.Count * price.Price;
                     }
                 }
                 return View(viewModel);
