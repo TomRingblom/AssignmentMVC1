@@ -69,7 +69,7 @@ namespace Assignment.MVC.Controllers
                 {
                     var cartFromApi = new ShoppingCartModel();
                     cartFromApi = await client.GetFromJsonAsync<ShoppingCartModel>("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.UserId}" + $"?productId={viewModel.ProductId}");
-                    viewModel.Count = IncrementCount(cartFromApi, viewModel.Count);
+                    viewModel.Count = cartFromApi.Count += viewModel.Count;
                     viewModel.Id = cartFromApi.Id;
                     await client.PutAsJsonAsync("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.Id}", viewModel);
                 }
@@ -77,17 +77,6 @@ namespace Assignment.MVC.Controllers
             }
 
             return RedirectToAction(nameof(Index));
-        }
-        public int IncrementCount(ShoppingCartModel shoppingCart, int count)
-        {
-            shoppingCart.Count += count;
-            return shoppingCart.Count;
-        }
-
-        public int DecrementCount(ShoppingCartModel shoppingCart, int count)
-        {
-            shoppingCart.Count -= count;
-            return shoppingCart.Count;
         }
     }
 }

@@ -20,7 +20,6 @@ namespace Assignment.MVC.Controllers
                 viewModel.UserId = claim.Value;
 
                 var responseTask = client.GetAsync("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.UserId}");
-
                 var result = responseTask.Result;
 
                 if (result.StatusCode == HttpStatusCode.NoContent)
