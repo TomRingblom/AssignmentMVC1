@@ -1,6 +1,5 @@
 ﻿using Assignment.WebApi.Models;
 using Assignment.WebApi.Models.Entities;
-using Assignment.WebApi.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

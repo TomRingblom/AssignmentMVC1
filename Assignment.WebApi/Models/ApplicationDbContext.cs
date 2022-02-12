@@ -13,5 +13,5 @@ public class ApplicationDbContext : DbContext
     public DbSet<SubCategoryEntity> SubCategories { get; set; }
     public DbSet<ShoppingCartEntity> ShoppingCarts { get; set; }
     public DbSet<OrderEntity> Orders { get; set; }
-    public DbSet<OrderDetailsEntity> OrdersDetails { get; set; }
+    public DbSet<OrderDetailsEntity> OrderDetails { get; set; }
 }

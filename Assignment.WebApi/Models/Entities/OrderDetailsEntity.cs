@@ -6,6 +6,19 @@ namespace Assignment.WebApi.Models.Entities;
 
 public class OrderDetailsEntity
 {
+    public OrderDetailsEntity()
+    {
+        
+    }
+
+    public OrderDetailsEntity(int orderId, int productId, double price, int quantity)
+    {
+        OrderId = orderId;
+        ProductId = productId;
+        Price = price;
+        Quantity = quantity;
+    }
+
     [Key] 
     public int Id { get; set; }
     public int OrderId { get; set; }

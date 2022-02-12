@@ -5,6 +5,17 @@ namespace Assignment.WebApi.Models.Entities;
 
 public class OrderEntity
 {
+    public OrderEntity()
+    {
+        
+    }
+
+    public OrderEntity(string customerId, DateTime orderDate)
+    {
+        CustomerId = customerId;
+        OrderDate = orderDate;
+    }
+
     [Key]
     public int Id { get; set; }
     [Required]
