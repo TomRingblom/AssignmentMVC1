@@ -2,7 +2,7 @@
 
 public class ShoppingCartModel
 {
-    public int Id { get; set; }
+    public int CartId { get; set; }
     public int ProductId { get; set; }
     public int Count { get; set; }
     public string UserId { get; set; }

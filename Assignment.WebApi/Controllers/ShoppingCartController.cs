@@ -17,20 +17,20 @@ namespace Assignment.WebApi.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ShoppingCartModel>>> GetShoppingCarts()
-        {
-            var categories = new List<ShoppingCartModel>();
-            foreach (var item in await _context.ShoppingCarts.ToListAsync())
-            {
-                categories.Add(new ShoppingCartModel(item.ProductId, item.Count, item.UserId, item.Price));
-            }
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<ShoppingCartModel>>> GetShoppingCarts()
+        //{
+        //    var categories = new List<ShoppingCartModel>();
+        //    foreach (var item in await _context.ShoppingCarts.ToListAsync())
+        //    {
+        //        categories.Add(new ShoppingCartModel(item.ProductId, item.Count, item.UserId, item.Price));
+        //    }
 
-            return categories;
-        }
+        //    return categories;
+        //}
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<ShoppingCartModel>>> GetShoppingCart(string id, int? productId)
+        public async Task<ActionResult<IEnumerable<ShoppingCartModel>>> GetShoppingCartDetails(string id, int? productId)
         {
             
             if (productId == null)
@@ -53,15 +53,30 @@ namespace Assignment.WebApi.Controllers
             }
             else
             {
-                var shoppinCart = new ShoppingCartEntity();
-                shoppinCart = await _context.ShoppingCarts.FirstOrDefaultAsync(x => x.UserId == id && x.ProductId == productId);
-                if (shoppinCart == null)
+                var shoppingCart = new ShoppingCartEntity();
+                shoppingCart = await _context.ShoppingCarts.FirstOrDefaultAsync(x => x.UserId == id && x.ProductId == productId);
+                if (shoppingCart == null)
                     return NoContent();
 
-                return Ok(shoppinCart);
+                return Ok(shoppingCart);
+            }
+        }
+        [HttpGet("Summary")]
+        public ActionResult<IEnumerable<ShoppingCartModel>> GetShoppingCartSummary(string id)
+        {
+            var shoppingCart = new List<ShoppingCartModel>();
+            var products = from product in _context.Products
+                join shop in _context.ShoppingCarts on product.Id equals shop.ProductId
+                where shop.UserId == id
+                select new { Product = product, Cart = shop };
+
+
+            foreach (var item in products)
+            {
+                shoppingCart.Add(new ShoppingCartModel(item.Cart.Id, item.Product.Id, item.Cart.Count, item.Cart.UserId, item.Product.Price));
             }
 
-            
+            return Ok(shoppingCart);
         }
 
         [HttpPut("{id}")]

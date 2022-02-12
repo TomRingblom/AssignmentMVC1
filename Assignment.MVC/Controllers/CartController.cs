@@ -69,8 +69,8 @@ namespace Assignment.MVC.Controllers
                             "https://localhost:7158/api/ShoppingCart/" + $"{viewModel.UserId}" +
                             $"?productId={viewModel.ProductId}");
                         viewModel.Count = cartFromApi.Count += viewModel.Count;
-                        viewModel.Id = cartFromApi.Id;
-                        await client.PutAsJsonAsync("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.Id}",
+                        viewModel.CartId = cartFromApi.CartId;
+                        await client.PutAsJsonAsync("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.CartId}",
                             viewModel);
                     }
 
@@ -81,6 +81,24 @@ namespace Assignment.MVC.Controllers
             else
                 return BadRequest();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DetailsPost(CreateOrderModel model)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            using (var client = new HttpClient())
+            {
+                var viewModel = new CreateOrderModel();
+                viewModel.CustomerId = claim.Value;
+                viewModel.ShoppingCarts = await client.GetFromJsonAsync<IEnumerable<ShoppingCartModel>>("https://localhost:7158/api/ShoppingCart/Summary?id=" + $"{viewModel.CustomerId}");
+                await client.PostAsJsonAsync("https://localhost:7158/api/Order", viewModel);
+            }
+
+            return RedirectToAction("Index"); // Byt denna sen
+        }
+
         public async Task<IActionResult> Add(int cartId)
         {
             using (var client = new HttpClient())

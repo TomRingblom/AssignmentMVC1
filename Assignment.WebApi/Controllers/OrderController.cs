@@ -35,7 +35,7 @@ namespace Assignment.WebApi.Controllers
                 var cartsToEntity = new List<ShoppingCartEntity>();
                 foreach (var cart in model.ShoppingCarts)
                 {
-                    cartsToEntity.Add(new ShoppingCartEntity(cart.Id, cart.ProductId, cart.Count, cart.UserId, cart.Price));
+                    cartsToEntity.Add(new ShoppingCartEntity(cart.CartId, cart.ProductId, cart.Count, cart.UserId, cart.Price));
                     var createOrderDetails = new OrderDetailsEntity(createOrder.Id, cart.ProductId, cart.Price, cart.Count);
                     _context.OrderDetails.Add(createOrderDetails);
                     await _context.SaveChangesAsync();
