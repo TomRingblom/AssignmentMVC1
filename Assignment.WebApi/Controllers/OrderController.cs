@@ -16,11 +16,33 @@ namespace Assignment.WebApi.Controllers
         {
             _context = context;
         }
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<ProductModel>>> GetOrderDetails()
-        //{
 
-        //}
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ProductModel>>> GetOrderDetails(string id)
+        {
+            if (id == null)
+                return BadRequest();
+
+            var getUserOrders = from product in _context.Products
+                                 join orderD in _context.OrderDetails on product.Id equals orderD.ProductId
+                                 join order in _context.Orders on orderD.OrderId equals order.Id
+                                 where order.CustomerId == id
+                                 select new { Product = product, Order = order, OrderDetails = orderD };
+
+
+            var orderDetails = new List<ShowOrdersModel>();
+            foreach (var order in getUserOrders)
+            {
+                orderDetails.Add(new ShowOrdersModel {
+                    OrderId = order.Order.Id,
+                    ProductName = order.Product.Name,
+                    Price = order.OrderDetails.Price,
+                    Quantity = order.OrderDetails.Quantity,
+                    OrderDate = order.Order.OrderDate
+                });
+            }
+            return Ok(orderDetails);
+        }
 
         [HttpPost]
         public async Task<ActionResult<OrderDetailsEntity>> CreateOrder(CreateOrderModel model)
