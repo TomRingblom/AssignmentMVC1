@@ -1,21 +1,24 @@
 ﻿@model OrderHistoryVM
 
-<div class="row justify-content-center align-items-center">
-        <div class="card w-100 mt-3">
-            <div class="card-body">
-                @foreach (var order in Model.ListCart)
-                {
-                    <ul class="list-group list-group-horizontal mt-3">
-                        <li class="list-group-item">Ordernummer: @order.OrderId</li>
-                        <li class="list-group-item">Antal: @order.Quantity</li>
-                        <li class="list-group-item">Pris: @order.Price kr/st</li>
-                        <li class="list-group-item">Produktnamn: @order.ProductName</li>
-                    </ul>
 
-                }
-                <ul class="list-group list-group-horizontal mt-3">
-                    <li class="list-group-item">Totalsumma: @Model.CartTotal kr</li>
-                </ul>
-            </div>
+
+<div class="row justify-content-center align-items-center">
+    <div class="card w-100 mt-3">
+        <div class="card-body">
+            @foreach (var order in Model)
+            {
+                
+            <ul class="list-group list-group-horizontal mt-3">
+                <li class="list-group-item">Ordernummer: @order.OrderId</li>
+                <li class="list-group-item">Antal: @order.Quantity</li>
+                <li class="list-group-item">Pris: @order.Price kr/st</li>
+                <li class="list-group-item">Produktnamn: @order.ProductName</li>
+            </ul>
+
+            }
+            <ul class="list-group list-group-horizontal mt-3">
+                <li class="list-group-item">Totalsumma: @Model.CartTotal kr</li>
+            </ul>
         </div>
     </div>
+</div>
