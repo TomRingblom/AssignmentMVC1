@@ -1,4 +1,5 @@
-﻿using Assignment.WebApi.Models;
+﻿using Assignment.WebApi.Filters;
+using Assignment.WebApi.Models;
 using Assignment.WebApi.Models.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Assignment.WebApi.Controllers
 {
+    [ApiKeyAuth]
     [Route("api/[controller]")]
     [ApiController]
     public class ShoppingCartController : ControllerBase
@@ -36,15 +38,15 @@ namespace Assignment.WebApi.Controllers
             if (productId == null)
             {
                 var shoppingCart = new List<ShoppingCartDetailsModel>();
-                var products = from product in _context.Products
-                    join shopp in _context.ShoppingCarts on product.Id equals shopp.ProductId
-                    where shopp.UserId == id
-                    select new {Product = product, Cart = shopp};
+
+                var products = await _context.ShoppingCarts
+                    .Include(x => x.ProductEntity)
+                    .Where(x => x.UserId == id).ToListAsync();
 
 
                 foreach (var item in products)
                 {
-                    shoppingCart.Add(new ShoppingCartDetailsModel(item.Cart.Id, item.Product.Id, item.Product.Name, item.Product.Price, item.Cart.Count));
+                    shoppingCart.Add(new ShoppingCartDetailsModel(item.Id, item.ProductEntity.Id, item.ProductEntity.Name, item.ProductEntity.Price, item.Count));
                 }
                 if (shoppingCart == null)
                     return NoContent();
@@ -62,18 +64,18 @@ namespace Assignment.WebApi.Controllers
             }
         }
         [HttpGet("Summary")]
-        public ActionResult<IEnumerable<ShoppingCartModel>> GetShoppingCartSummary(string id)
+        public async Task<ActionResult<IEnumerable<ShoppingCartModel>>> GetShoppingCartSummary(string id)
         {
             var shoppingCart = new List<ShoppingCartModel>();
-            var products = from product in _context.Products
-                join shop in _context.ShoppingCarts on product.Id equals shop.ProductId
-                where shop.UserId == id
-                select new { Product = product, Cart = shop };
+
+            var products = await _context.ShoppingCarts
+                .Include(x => x.ProductEntity)
+                .Where(x => x.UserId == id).ToListAsync();
 
 
             foreach (var item in products)
             {
-                shoppingCart.Add(new ShoppingCartModel(item.Cart.Id, item.Product.Id, item.Cart.Count, item.Cart.UserId, item.Product.Price));
+                shoppingCart.Add(new ShoppingCartModel(item.Id, item.ProductEntity.Id, item.Count, item.UserId, item.ProductEntity.Price));
             }
 
             return Ok(shoppingCart);

@@ -1,4 +1,5 @@
-﻿using Assignment.WebApi.Models;
+﻿using Assignment.WebApi.Filters;
+using Assignment.WebApi.Models;
 using Assignment.WebApi.Models.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Assignment.WebApi.Controllers
 {
+    [ApiKeyAuth]
     [Route("api/[controller]")]
     [ApiController]
     public class OrderController : ControllerBase
@@ -33,15 +35,15 @@ namespace Assignment.WebApi.Controllers
                 order.OrderDate = o.OrderDate;
                 order.OrderId = o.Id;
 
-                var products = from product in await _context.Products.ToListAsync()
-                    join od in await _context.OrderDetails.ToListAsync() on product.Id equals od.ProductId
-                    where od.OrderId == order.OrderId
-                    select new {Product = product, OrderD = od};
+                var productsWithOrderDetails = await _context.OrderDetails
+                    .Include(x => x.Product)
+                    .Where(y => y.OrderId == order.OrderId)
+                    .ToArrayAsync();
 
-                foreach (var p in products)
+                foreach (var p in productsWithOrderDetails)
                 {
-                    order.TotalPrice += p.OrderD.Price * p.OrderD.Quantity;
-                    order.Items.Add(new ProductOrderModel(p.Product.Id, p.Product.Name, p.Product.Description, p.Product.Price, p.OrderD.Quantity));
+                    order.TotalPrice += p.Product.Price * p.Quantity;
+                    order.Items.Add(new ProductOrderModel(p.Product.Id, p.Product.Name, p.Product.Description, p.Product.Price, p.Quantity));
                 }
                 userOrders.Add(order);
             }

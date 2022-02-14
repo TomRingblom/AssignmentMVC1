@@ -13,7 +13,7 @@ namespace Assignment.MVC.Controllers
 
             using (var client = new HttpClient())
             {
-                viewModel.Categories = await client.GetFromJsonAsync<IEnumerable<CategoryModel>>("https://localhost:7158/api/Category");
+                viewModel.Categories = await client.GetFromJsonAsync<IEnumerable<CategoryModel>>("https://localhost:7158/api/category?key=Banana");
             }
 
             return View(viewModel);

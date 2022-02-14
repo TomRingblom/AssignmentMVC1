@@ -1,4 +1,5 @@
-﻿using Assignment.WebApi.Models;
+﻿using Assignment.WebApi.Filters;
+using Assignment.WebApi.Models;
 using Assignment.WebApi.Models.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Assignment.WebApi.Controllers
 {
+    [ApiKeyAuth]
     [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase

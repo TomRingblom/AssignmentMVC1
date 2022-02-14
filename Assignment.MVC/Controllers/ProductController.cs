@@ -16,9 +16,9 @@ namespace Assignment.MVC.Controllers
             using (var client = new HttpClient())
             {
                 if (input == null)
-                    viewModel.Products = await client.GetFromJsonAsync<IEnumerable<ProductModel>>("https://localhost:7158/api/Product");
+                    viewModel.Products = await client.GetFromJsonAsync<IEnumerable<ProductModel>>("https://localhost:7158/api/product?key=Banana");
 
-                viewModel.Products = await client.GetFromJsonAsync<IEnumerable<ProductModel>>("https://localhost:7158/api/Product/?subcategory=" + $"{input}");
+                viewModel.Products = await client.GetFromJsonAsync<IEnumerable<ProductModel>>("https://localhost:7158/api/product/?subcategory=" + $"{input}" +"?key=Banana");
             }
 
             return View(viewModel);
@@ -37,7 +37,7 @@ namespace Assignment.MVC.Controllers
 
             using (var client = new HttpClient())
             {
-                viewModel.Product = await client.GetFromJsonAsync<ProductModel>("https://localhost:7158/api/Product/" + $"{productId}");
+                viewModel.Product = await client.GetFromJsonAsync<ProductModel>($"https://localhost:7158/api/product/{productId}?key=Banana");
             }
 
             return View(viewModel);

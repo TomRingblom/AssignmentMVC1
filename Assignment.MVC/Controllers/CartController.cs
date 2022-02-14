@@ -19,7 +19,7 @@ namespace Assignment.MVC.Controllers
                 viewModel.ListCart = new List<ShoppingCartDetailsModel>();
                 viewModel.UserId = claim.Value;
 
-                var responseTask = client.GetAsync("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.UserId}");
+                var responseTask = client.GetAsync("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.UserId}" + "?key=Banana");
                 var result = responseTask.Result;
 
                 if (result.StatusCode == HttpStatusCode.NoContent)
@@ -28,7 +28,7 @@ namespace Assignment.MVC.Controllers
                 }
                 else
                 {
-                    viewModel.ListCart = await client.GetFromJsonAsync<IEnumerable<ShoppingCartDetailsModel>>("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.UserId}");
+                    viewModel.ListCart = await client.GetFromJsonAsync<IEnumerable<ShoppingCartDetailsModel>>("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.UserId}" + "?key=Banana");
                     foreach (var price in viewModel.ListCart)
                     {
                         viewModel.CartTotal += price.Count * price.Price;
@@ -54,23 +54,23 @@ namespace Assignment.MVC.Controllers
                 using (var client = new HttpClient())
                 {
                     var responseTask = client.GetAsync("https://localhost:7158/api/ShoppingCart/" +
-                                                       $"{viewModel.UserId}" + $"?productId={viewModel.ProductId}");
+                                                       $"{viewModel.UserId}" + $"?productId={viewModel.ProductId}" + "?key=Banana");
 
                     var result = responseTask.Result;
 
                     if (result.StatusCode == HttpStatusCode.NoContent)
                     {
-                        await client.PostAsJsonAsync("https://localhost:7158/api/ShoppingCart", viewModel);
+                        await client.PostAsJsonAsync("https://localhost:7158/api/ShoppingCart" + "?key=Banana", viewModel);
                     }
                     else
                     {
                         var cartFromApi = new ShoppingCartModel();
                         cartFromApi = await client.GetFromJsonAsync<ShoppingCartModel>(
                             "https://localhost:7158/api/ShoppingCart/" + $"{viewModel.UserId}" +
-                            $"?productId={viewModel.ProductId}");
+                            $"?productId={viewModel.ProductId}" + "?key=Banana");
                         viewModel.Count = cartFromApi.Count += viewModel.Count;
                         viewModel.CartId = cartFromApi.CartId;
-                        await client.PutAsJsonAsync("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.CartId}",
+                        await client.PutAsJsonAsync("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.CartId}" + "?key=Banana",
                             viewModel);
                     }
 
@@ -91,8 +91,8 @@ namespace Assignment.MVC.Controllers
             {
                 var viewModel = new CreateOrderModel();
                 viewModel.CustomerId = claim.Value;
-                viewModel.ShoppingCarts = await client.GetFromJsonAsync<IEnumerable<ShoppingCartModel>>("https://localhost:7158/api/ShoppingCart/Summary?id=" + $"{viewModel.CustomerId}");
-                await client.PostAsJsonAsync("https://localhost:7158/api/Order", viewModel);
+                viewModel.ShoppingCarts = await client.GetFromJsonAsync<IEnumerable<ShoppingCartModel>>("https://localhost:7158/api/ShoppingCart/Summary?id=" + $"{viewModel.CustomerId}" + "?key=Banana");
+                await client.PostAsJsonAsync("https://localhost:7158/api/Order" + "?key=Banana", viewModel);
             }
 
             return RedirectToAction("Index"); // Byt denna sen
@@ -102,7 +102,7 @@ namespace Assignment.MVC.Controllers
         {
             using (var client = new HttpClient())
             {
-                await client.PutAsJsonAsync("https://localhost:7158/api/ShoppingCart/AddOneToCart?id=" + $"{cartId}", cartId);
+                await client.PutAsJsonAsync("https://localhost:7158/api/ShoppingCart/AddOneToCart?id=" + $"{cartId}" + "?key=Banana", cartId);
             }
 
             return RedirectToAction(nameof(Index));
@@ -111,7 +111,7 @@ namespace Assignment.MVC.Controllers
         {
             using (var client = new HttpClient())
             {
-                await client.PutAsJsonAsync("https://localhost:7158/api/ShoppingCart/SubOneToCart?id=" + $"{cartId}", cartId);
+                await client.PutAsJsonAsync("https://localhost:7158/api/ShoppingCart/SubOneToCart?id=" + $"{cartId}" + "?key=Banan", cartId);
             }
 
             return RedirectToAction(nameof(Index));
