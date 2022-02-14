@@ -26,36 +26,25 @@ namespace Assignment.WebApi.Controllers
             var userOrders = new List<OrderModel>();
             var orders = await _context.Orders.Where(x => x.CustomerId == id).ToListAsync();
 
-            
             foreach (var o in orders)
             {
                 OrderModel order = new();
-                order.Items = new List<ProductModel>();
+                order.Items = new List<ProductOrderModel>();
                 order.OrderDate = o.OrderDate;
                 order.OrderId = o.Id;
 
-                var orderPrice = from orderss in _context.OrderDetails
-                                 join od in _context.Orders on orderss.OrderId equals od.Id
-                                 where od.Id == order.OrderId
-                                 select orderss;
-                foreach (var price in orderPrice)
-                {
-                    order.TotalPrice += price.Price * price.Quantity;
-                }
-
-                var products = from product in _context.Products
-                    join od in _context.OrderDetails on product.Id equals od.ProductId
+                var products = from product in await _context.Products.ToListAsync()
+                    join od in await _context.OrderDetails.ToListAsync() on product.Id equals od.ProductId
                     where od.OrderId == order.OrderId
-                    select product;
+                    select new {Product = product, OrderD = od};
 
                 foreach (var p in products)
                 {
-                    order.Items.Add(new ProductModel(p.Id, p.Name, p.Description, p.Price));
+                    order.TotalPrice += p.OrderD.Price * p.OrderD.Quantity;
+                    order.Items.Add(new ProductOrderModel(p.Product.Id, p.Product.Name, p.Product.Description, p.Product.Price, p.OrderD.Quantity));
                 }
                 userOrders.Add(order);
-                
             }
-
             return Ok(userOrders);
         }
 
