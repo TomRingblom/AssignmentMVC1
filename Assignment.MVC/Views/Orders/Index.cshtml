@@ -1,4 +1,4 @@
-﻿@model OrderHistoryVM
+﻿@model IEnumerable<OrderModel>
 
 
 
@@ -10,15 +10,18 @@
                 
             <ul class="list-group list-group-horizontal mt-3">
                 <li class="list-group-item">Ordernummer: @order.OrderId</li>
-                <li class="list-group-item">Antal: @order.Quantity</li>
-                <li class="list-group-item">Pris: @order.Price kr/st</li>
-                <li class="list-group-item">Produktnamn: @order.ProductName</li>
+                @foreach (var item in @order.Items)
+                {
+                    <li class="list-group-item">Produktnamn: @item.Name</li>
+                <li class="list-group-item">Pris: @item.Price kr/st</li>
+                }
+                
             </ul>
-
+                <ul class="list-group list-group-horizontal mt-3">
+                    <li class="list-group-item">Totalsumma:@order.TotalPrice kr</li>
+                </ul>
             }
-            <ul class="list-group list-group-horizontal mt-3">
-                <li class="list-group-item">Totalsumma: @Model.CartTotal kr</li>
-            </ul>
+            
         </div>
     </div>
 </div>

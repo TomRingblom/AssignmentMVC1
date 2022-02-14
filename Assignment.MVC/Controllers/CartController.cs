@@ -77,9 +77,8 @@ namespace Assignment.MVC.Controllers
                 }
 
                 return RedirectToAction(nameof(Index));
-            }
-            else
-                return BadRequest();
+            } 
+            return BadRequest();
         }
 
         [HttpPost]

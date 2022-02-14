@@ -6,36 +6,31 @@ using System.Security.Claims;
 
 namespace Assignment.MVC.Controllers
 {
-    //public class OrdersController : Controller
-    //{
-    //    public async Task<IActionResult> Index()
-    //    {
-    //        using (var client = new HttpClient())
-    //        {
-    //            var claimsIdentity = (ClaimsIdentity)User.Identity;
-    //            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+    public class OrdersController : Controller
+    {
+        public async Task<IActionResult> Index()
+        {
+            using (var client = new HttpClient())
+            {
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-    //            var viewModel = new OrderHistoryVM();
+                var viewModel = new List<OrderModel>();
 
-    //            var responseTask = client.GetAsync("https://localhost:7158/api/Order?id=" + $"{claim.Value}");
-    //            var result = responseTask.Result;
+                var responseTask = client.GetAsync("https://localhost:7158/api/Order?id=" + $"{claim.Value}");
+                var result = responseTask.Result;
 
-    //            if (result.StatusCode == HttpStatusCode.NoContent)
-    //            {
-    //                return View(viewModel);
-    //            }
-    //            else
-    //            {
-    //                viewModel.OrderItems = await client.GetFromJsonAsync<IEnumerable<OrderModel>>("https://localhost:7158/api/Order?id=" + $"{claim.Value}");
-    //                //foreach (var price in viewModel.OrderItems)
-    //                //{
-    //                //    viewModel. += price.OrderItems.Count * price.OrderItems.;
-    //                //}
-    //            }
+                if (result.StatusCode == HttpStatusCode.NoContent)
+                {
+                    return View(viewModel);
+                }
+                else
+                {
+                    viewModel = await client.GetFromJsonAsync<List<OrderModel>>("https://localhost:7158/api/Order?id=" + $"{claim.Value}");
+                }
 
-    //            return View(viewModel);
-    //        }
-    //        //return View();
-    //    }
-    //}
+                return View(viewModel);
+            }
+        }
+    }
 }

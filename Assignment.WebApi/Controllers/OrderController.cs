@@ -25,57 +25,38 @@ namespace Assignment.WebApi.Controllers
 
             var userOrders = new List<OrderModel>();
             var orders = await _context.Orders.Where(x => x.CustomerId == id).ToListAsync();
-            var products = await _context.Products.ToListAsync();
-            var orderDetails = await _context.OrderDetails.ToListAsync();
 
-            foreach (var item in orders)
+            
+            foreach (var o in orders)
             {
-                //blabla
-                //loopa orderDetails
-                //loopa igenom produkter med info från orderDetails
-                //Lägg till varje OrderItem i listan
+                OrderModel order = new();
+                order.Items = new List<ProductModel>();
+                order.OrderDate = o.OrderDate;
+                order.OrderId = o.Id;
+
+                var orderPrice = from orderss in _context.OrderDetails
+                                 join od in _context.Orders on orderss.OrderId equals od.Id
+                                 where od.Id == order.OrderId
+                                 select orderss;
+                foreach (var price in orderPrice)
+                {
+                    order.TotalPrice += price.Price * price.Quantity;
+                }
+
+                var products = from product in _context.Products
+                    join od in _context.OrderDetails on product.Id equals od.ProductId
+                    where od.OrderId == order.OrderId
+                    select product;
+
+                foreach (var p in products)
+                {
+                    order.Items.Add(new ProductModel(p.Id, p.Name, p.Description, p.Price));
+                }
+                userOrders.Add(order);
+                
             }
 
-
-            //var getUserOrders = from product in _context.Products
-            //                    join orderD in _context.OrderDetails on product.Id equals orderD.ProductId
-            //                    join order in _context.Orders on orderD.OrderId equals order.Id
-            //                    where order.CustomerId == id
-            //                    select new { Product = product, Order = order, OrderDetails = orderD };
-
-            //var getUserOrderss = from product in _context.Products
-            //                     join orderD in _context.OrderDetails on product.Id equals orderD.ProductId
-            //                     join order in _context.Orders on orderD.OrderId equals order.Id
-            //                     where order.CustomerId == id
-            //                     select product;
-
-
-            //var gUser = await _context.Products.Join(_context.OrderDetails, p => p.Id, od => od.ProductId).Join()
-
-            //var orders = new OrderTestModel();
-            //var orders = new List<OrderModel>();
-            //orders.OrderItems = new List<OrderItemModel>();
-
-            //foreach (var order in getUserOrderss)
-            //{
-            //    orders.OrderId = order.OrderDetails.OrderId;
-            //    orders.OrderItems.Add(new OrderItemModel(order.Product, order.OrderDetails.Quantity));
-            //}
-
-
-
-            //foreach (var order in getUserOrders.Pr)
-            //{
-            //    orderDetails.Add(new ShowOrdersModel
-            //    {
-            //        OrderId = order.Order.Id,
-            //        ProductName = order.Product.Name,
-            //        Price = order.OrderDetails.Price,
-            //        Quantity = order.OrderDetails.Quantity,
-            //        OrderDate = order.Order.OrderDate
-            //    });
-            //}
-            return Ok();
+            return Ok(userOrders);
         }
 
         [HttpPost]

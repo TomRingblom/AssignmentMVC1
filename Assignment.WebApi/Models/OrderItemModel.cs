@@ -9,12 +9,10 @@ namespace Assignment.WebApi.Models
             
         }
 
-        public OrderItemModel(ProductEntity products, int quantity)
+        public OrderItemModel(ProductEntity products)
         {
             Products = products;
-            Quantity = quantity;
         }
         public ProductEntity Products { get; set; }
-        public int Quantity { get; set; }
     }
 }

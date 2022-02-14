@@ -7,6 +7,14 @@ public class ProductModel
         
     }
 
+    public ProductModel(int id, string name, string description, double price)
+    {
+        Id = id;
+        Name = name;
+        Description = description;
+        Price = price;
+    }
+
     public ProductModel(int id, string name, string description, double price, int subCategoryId)
     {
         Id = id;
