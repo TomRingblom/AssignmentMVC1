@@ -20,6 +20,12 @@ namespace Assignment.WebApi.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetAllOrders()
+        {
+            return Ok(await _context.OrderDetails.Include(x => x.Order).ToListAsync());
+        }
+
+        [HttpGet("UserId")]
         public async Task<ActionResult<IEnumerable<ProductModel>>> GetOrderDetails(string id)
         {
             if (id == null)
@@ -55,7 +61,7 @@ namespace Assignment.WebApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                var createOrder = new OrderEntity(model.CustomerId, DateTime.Now);
+                var createOrder = new OrderEntity(model.CustomerId, DateTime.Now, DateTime.Now);
                 _context.Orders.Add(createOrder);
                 await _context.SaveChangesAsync();
 
@@ -78,6 +84,46 @@ namespace Assignment.WebApi.Controllers
             }
 
             return BadRequest();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateOrder(int id, UpdateOrdersModel model)
+        {
+            if (!ModelState.IsValid || id != model.OrderId)
+                return BadRequest();
+
+            var order = await _context.Orders.FindAsync(id);
+            if (order == null)
+                return NotFound();
+
+            order.OrderChangeDate = DateTime.Now;
+
+            var orderDetails = await _context.OrderDetails.FindAsync(model.OrderDetailsToUpdate);
+            orderDetails.ProductId = model.ProductId;
+            orderDetails.Price = model.Price;
+            orderDetails.Quantity = model.Quantity;
+
+            _context.Entry(order).State = EntityState.Modified;
+            _context.Entry(orderDetails).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteOrder(int id)
+        {
+            var orderToDelete = await _context.Orders.FindAsync(id);
+            if (orderToDelete == null)
+                return NotFound();
+
+            var orderDetailsToDelete =
+                await _context.OrderDetails.Where(x => x.OrderId == orderToDelete.Id).ToListAsync();
+            
+            _context.Orders.Remove(orderToDelete);
+            _context.OrderDetails.RemoveRange(orderDetailsToDelete);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }

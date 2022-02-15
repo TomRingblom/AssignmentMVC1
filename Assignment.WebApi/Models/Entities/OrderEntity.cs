@@ -10,10 +10,11 @@ public class OrderEntity
         
     }
 
-    public OrderEntity(string customerId, DateTime orderDate)
+    public OrderEntity(string customerId, DateTime orderDate, DateTime orderChangeDate)
     {
         CustomerId = customerId;
         OrderDate = orderDate;
+        OrderChangeDate = orderChangeDate;
     }
 
     [Key]
@@ -21,4 +22,6 @@ public class OrderEntity
     [Required]
     public string CustomerId { get; set; }
     public DateTime OrderDate { get; set; }
+    public DateTime OrderChangeDate { get; set; }
+
 }

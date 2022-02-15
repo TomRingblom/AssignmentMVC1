@@ -24,7 +24,6 @@ namespace Assignment.MVC.Controllers
             return View(viewModel);
         }
 
-        [HttpGet]
         public async Task<IActionResult> Details(int? productId)
         {
             var viewModel = new ProductDetailsModel();

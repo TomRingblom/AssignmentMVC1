@@ -26,7 +26,7 @@ namespace Assignment.MVC.Controllers
                 }
                 else
                 {
-                    viewModel = await client.GetFromJsonAsync<List<OrderModel>>("https://localhost:7158/api/order?id=" + $"{claim.Value}" + "&key=Banana");
+                    viewModel = await client.GetFromJsonAsync<List<OrderModel>>("https://localhost:7158/api/Order/UserId?id=" + $"{claim.Value}" + "&key=Banana");
                 }
 
                 return View(viewModel);

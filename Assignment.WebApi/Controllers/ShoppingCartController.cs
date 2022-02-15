@@ -19,17 +19,11 @@ namespace Assignment.WebApi.Controllers
             _context = context;
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<ShoppingCartModel>>> GetShoppingCarts()
-        //{
-        //    var categories = new List<ShoppingCartModel>();
-        //    foreach (var item in await _context.ShoppingCarts.ToListAsync())
-        //    {
-        //        categories.Add(new ShoppingCartModel(item.ProductId, item.Count, item.UserId, item.Price));
-        //    }
-
-        //    return categories;
-        //}
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ShoppingCartModel>>> GetShoppingCarts()
+        {
+            return Ok(await _context.ShoppingCarts.ToListAsync());
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<ShoppingCartModel>>> GetShoppingCartDetails(string id, int? productId)
@@ -91,8 +85,11 @@ namespace Assignment.WebApi.Controllers
             if (shoppingCart == null)
                 return NotFound();
 
+            shoppingCart.ProductId = model.ProductId;
             shoppingCart.Count = model.Count;
-
+            shoppingCart.UserId = model.UserId;
+            shoppingCart.Price = model.Price;
+            
             _context.Entry(shoppingCart).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return Ok();
@@ -132,7 +129,7 @@ namespace Assignment.WebApi.Controllers
 
                 var addedShoppingCart = await _context.ShoppingCarts.FirstOrDefaultAsync(x => x.Id == createShoppingCart.Id);
 
-                return CreatedAtAction("GetShoppingCart", new { id = createShoppingCart.Id }, new ShoppingCartModel(addedShoppingCart.Id, addedShoppingCart.ProductId, addedShoppingCart.Count, addedShoppingCart.UserId, addedShoppingCart.Price));
+                return CreatedAtAction("GetShoppingCartDetails", new { id = createShoppingCart.Id }, new ShoppingCartModel(addedShoppingCart.Id, addedShoppingCart.ProductId, addedShoppingCart.Count, addedShoppingCart.UserId, addedShoppingCart.Price));
             }
 
             return BadRequest();
@@ -141,11 +138,11 @@ namespace Assignment.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteShoppingCart(int id)
         {
-            var findShoppingCartToDelete = await _context.ShoppingCarts.FindAsync(id);
-            if (findShoppingCartToDelete == null)
+            var shoppingCartToDelete = await _context.ShoppingCarts.FindAsync(id);
+            if (shoppingCartToDelete == null)
                 return NotFound();
 
-            _context.ShoppingCarts.Remove(findShoppingCartToDelete);
+            _context.ShoppingCarts.Remove(shoppingCartToDelete);
             await _context.SaveChangesAsync();
 
             return NoContent();

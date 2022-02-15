@@ -67,7 +67,7 @@ namespace Assignment.MVC.Controllers
                         var cartFromApi = new ShoppingCartModel();
                         cartFromApi = await client.GetFromJsonAsync<ShoppingCartModel>(
                             "https://localhost:7158/api/ShoppingCart/" + $"{viewModel.UserId}" +
-                            $"?productId={viewModel.ProductId}" + "?key=Banana");
+                            $"?productId={viewModel.ProductId}" + "&key=Banana");
                         viewModel.Count = cartFromApi.Count += viewModel.Count;
                         viewModel.CartId = cartFromApi.CartId;
                         await client.PutAsJsonAsync("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.CartId}" + "?key=Banana",
