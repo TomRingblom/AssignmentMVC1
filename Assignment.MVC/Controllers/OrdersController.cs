@@ -17,7 +17,7 @@ namespace Assignment.MVC.Controllers
 
                 var viewModel = new List<OrderModel>();
 
-                var responseTask = client.GetAsync("https://localhost:7158/api/order?id=" + $"{claim.Value}" + "?key=Banana");
+                var responseTask = client.GetAsync("https://localhost:7158/api/order?id=" + $"{claim.Value}" + "&key=Banana");
                 var result = responseTask.Result;
 
                 if (result.StatusCode == HttpStatusCode.NoContent)
@@ -26,7 +26,7 @@ namespace Assignment.MVC.Controllers
                 }
                 else
                 {
-                    viewModel = await client.GetFromJsonAsync<List<OrderModel>>("https://localhost:7158/api/order?id=" + $"{claim.Value}" + "?key=Banana");
+                    viewModel = await client.GetFromJsonAsync<List<OrderModel>>("https://localhost:7158/api/order?id=" + $"{claim.Value}" + "&key=Banana");
                 }
 
                 return View(viewModel);

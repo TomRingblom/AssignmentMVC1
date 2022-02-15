@@ -54,13 +54,13 @@ namespace Assignment.MVC.Controllers
                 using (var client = new HttpClient())
                 {
                     var responseTask = client.GetAsync("https://localhost:7158/api/ShoppingCart/" +
-                                                       $"{viewModel.UserId}" + $"?productId={viewModel.ProductId}" + "?key=Banana");
-
+                                                       $"{viewModel.UserId}" + $"?productId={viewModel.ProductId}" + "&key=Banana");
+                    
                     var result = responseTask.Result;
 
                     if (result.StatusCode == HttpStatusCode.NoContent)
                     {
-                        await client.PostAsJsonAsync("https://localhost:7158/api/ShoppingCart" + "?key=Banana", viewModel);
+                        await client.PostAsJsonAsync("https://localhost:7158/api/ShoppingCart?key=Banana", viewModel);
                     }
                     else
                     {
@@ -91,7 +91,7 @@ namespace Assignment.MVC.Controllers
             {
                 var viewModel = new CreateOrderModel();
                 viewModel.CustomerId = claim.Value;
-                viewModel.ShoppingCarts = await client.GetFromJsonAsync<IEnumerable<ShoppingCartModel>>("https://localhost:7158/api/ShoppingCart/Summary?id=" + $"{viewModel.CustomerId}" + "?key=Banana");
+                viewModel.ShoppingCarts = await client.GetFromJsonAsync<IEnumerable<ShoppingCartModel>>("https://localhost:7158/api/ShoppingCart/Summary?id=" + $"{viewModel.CustomerId}" + "&key=Banana");
                 await client.PostAsJsonAsync("https://localhost:7158/api/Order" + "?key=Banana", viewModel);
             }
 
@@ -102,7 +102,7 @@ namespace Assignment.MVC.Controllers
         {
             using (var client = new HttpClient())
             {
-                await client.PutAsJsonAsync("https://localhost:7158/api/ShoppingCart/AddOneToCart?id=" + $"{cartId}" + "?key=Banana", cartId);
+                await client.PutAsJsonAsync("https://localhost:7158/api/ShoppingCart/AddOneToCart?id=" + $"{cartId}" + "&key=Banana", cartId);
             }
 
             return RedirectToAction(nameof(Index));
@@ -111,7 +111,7 @@ namespace Assignment.MVC.Controllers
         {
             using (var client = new HttpClient())
             {
-                await client.PutAsJsonAsync("https://localhost:7158/api/ShoppingCart/SubOneToCart?id=" + $"{cartId}" + "?key=Banan", cartId);
+                await client.PutAsJsonAsync("https://localhost:7158/api/ShoppingCart/SubOneToCart?id=" + $"{cartId}" + "&key=Banana", cartId);
             }
 
             return RedirectToAction(nameof(Index));

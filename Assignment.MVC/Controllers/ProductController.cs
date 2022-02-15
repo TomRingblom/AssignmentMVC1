@@ -17,8 +17,8 @@ namespace Assignment.MVC.Controllers
             {
                 if (input == null)
                     viewModel.Products = await client.GetFromJsonAsync<IEnumerable<ProductModel>>("https://localhost:7158/api/product?key=Banana");
-
-                viewModel.Products = await client.GetFromJsonAsync<IEnumerable<ProductModel>>("https://localhost:7158/api/product/?subcategory=" + $"{input}" +"?key=Banana");
+                else
+                    viewModel.Products = await client.GetFromJsonAsync<IEnumerable<ProductModel>>("https://localhost:7158/api/product?key=Banana&subcategory=" + $"{input}");
             }
 
             return View(viewModel);
