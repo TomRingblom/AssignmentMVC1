@@ -15,7 +15,8 @@ namespace Assignment.MVC.Controllers
                 var claimsIdentity = (ClaimsIdentity)User.Identity;
                 var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-                var viewModel = new List<OrderModel>();
+                var viewModel = new OrderHistoryVM();
+                viewModel.OrderItems = new List<OrderModel>();
 
                 var responseTask = client.GetAsync("https://localhost:7158/api/order?id=" + $"{claim.Value}" + "&key=Banana");
                 var result = responseTask.Result;
@@ -26,7 +27,7 @@ namespace Assignment.MVC.Controllers
                 }
                 else
                 {
-                    viewModel = await client.GetFromJsonAsync<List<OrderModel>>("https://localhost:7158/api/Order/UserId?id=" + $"{claim.Value}" + "&key=Banana");
+                    viewModel.OrderItems = await client.GetFromJsonAsync<List<OrderModel>>("https://localhost:7158/api/Order/UserId?id=" + $"{claim.Value}" + "&key=Banana");
                 }
 
                 return View(viewModel);

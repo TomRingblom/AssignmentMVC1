@@ -103,6 +103,9 @@ namespace Assignment.WebApi.Controllers
             orderDetails.Price = model.Price;
             orderDetails.Quantity = model.Quantity;
 
+            if (orderDetails.Quantity < 1)
+                _context.OrderDetails.Remove(orderDetails);
+
             _context.Entry(order).State = EntityState.Modified;
             _context.Entry(orderDetails).State = EntityState.Modified;
             await _context.SaveChangesAsync();

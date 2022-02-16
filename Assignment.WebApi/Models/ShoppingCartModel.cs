@@ -16,14 +16,6 @@ public class ShoppingCartModel
         Price = price;
     }
 
-    public ShoppingCartModel(int productId, int count, string userId, double price)
-    {
-        ProductId = productId;
-        Count = count;
-        UserId = userId;
-        Price = price;
-    }
-
     public int CartId { get; set; }
     public int ProductId { get; set; }
     public int Count { get; set; }
