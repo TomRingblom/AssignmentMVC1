@@ -20,39 +20,3 @@
         </ul>
     }
 </div>
-
-
-
-@*@foreach (var order in Model)
-{
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">Ordernummer</th>
-            <th scope="col">Artikelnummer</th>
-            <th scope="col">Produktnamn</th>
-            <th scope="col">Antal</th>
-            <th scope="col">Orderdatum</th>
-            <th scope="col">Totalsumma</th>
-        </tr>
-        </thead>
-
-        
-            
-            @foreach (var item in @order.Items)
-            {
-                <tbody>
-                <tr>
-                <td>@order.OrderId</td>
-                <td>@item.Id</td>
-                <td>@item.Name</td>
-                <td>@item.Quantity * @item.Price kr/st</td>
-                <td>@order.OrderDate</td>
-                <td>@order.TotalPrice</td>
-                </tr>
-                </tbody>
-            }
-            
-        
-    </table>
-}*@

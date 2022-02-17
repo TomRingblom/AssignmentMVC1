@@ -95,7 +95,7 @@ namespace Assignment.MVC.Controllers
                 await client.PostAsJsonAsync("https://localhost:7158/api/Order" + "?key=Banana", viewModel);
             }
 
-            return RedirectToAction("Index"); // Byt denna sen
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Add(int cartId)

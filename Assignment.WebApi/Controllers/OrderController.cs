@@ -79,8 +79,6 @@ namespace Assignment.WebApi.Controllers
                 await _context.SaveChangesAsync();
 
                 return Ok();
-                //var addedOrder = await _context.Orders.FirstOrDefaultAsync(x => x.Id == createOrder.Id);
-                //return CreatedAtAction("GetProduct", new { id = createProduct.Id }, new ProductModel(addedProduct.Id, addedProduct.Name, addedProduct.Description, addedProduct.Price, addedProduct.SubCategoryId, addedProduct.SubCategory.Category.Name, addedProduct.SubCategory.Name));
             }
 
             return BadRequest();
@@ -102,10 +100,7 @@ namespace Assignment.WebApi.Controllers
             orderDetails.ProductId = model.ProductId;
             orderDetails.Price = model.Price;
             orderDetails.Quantity = model.Quantity;
-
-            if (orderDetails.Quantity < 1)
-                _context.OrderDetails.Remove(orderDetails);
-
+            
             _context.Entry(order).State = EntityState.Modified;
             _context.Entry(orderDetails).State = EntityState.Modified;
             await _context.SaveChangesAsync();

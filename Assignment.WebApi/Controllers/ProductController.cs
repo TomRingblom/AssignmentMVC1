@@ -19,17 +19,6 @@ namespace Assignment.WebApi.Controllers
             _context = context;
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<ProductModel>>> GetProducts()
-        //{
-        //    var products = new List<ProductModel>();
-        //    foreach (var item in await _context.Products.Include(x => x.SubCategory).ThenInclude(c => c.Category).ToArrayAsync())
-        //    {
-        //        products.Add(new ProductModel(item.Id, item.Name, item.Description, item.Price, item.SubCategoryId, item.SubCategory.Category.Name, item.SubCategory.Name));
-        //    }
-        //    return Ok(products);
-        //}
-
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductModel>>> GetProductsByCategory(string subcategory)
         {
