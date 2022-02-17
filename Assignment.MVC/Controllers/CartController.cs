@@ -29,9 +29,10 @@ namespace Assignment.MVC.Controllers
                 else
                 {
                     viewModel.ListCart = await client.GetFromJsonAsync<IEnumerable<ShoppingCartDetailsModel>>("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.UserId}" + "?key=Banana");
-                    foreach (var price in viewModel.ListCart)
+                    
+                    foreach (var cart in viewModel.ListCart)
                     {
-                        viewModel.CartTotal += price.Count * price.Price;
+                        viewModel.CartTotal += cart.Count * cart.Price;
                     }
                 }
                 return View(viewModel);
@@ -64,14 +65,15 @@ namespace Assignment.MVC.Controllers
                     }
                     else
                     {
-                        var cartFromApi = new ShoppingCartModel();
-                        cartFromApi = await client.GetFromJsonAsync<ShoppingCartModel>(
-                            "https://localhost:7158/api/ShoppingCart/" + $"{viewModel.UserId}" +
-                            $"?productId={viewModel.ProductId}" + "&key=Banana");
-                        viewModel.Count = cartFromApi.Count += viewModel.Count;
-                        viewModel.CartId = cartFromApi.CartId;
-                        await client.PutAsJsonAsync("https://localhost:7158/api/ShoppingCart/" + $"{viewModel.CartId}" + "?key=Banana",
-                            viewModel);
+                        var cartFromApi = new List<ShoppingCartModel>();
+                        cartFromApi = await client.GetFromJsonAsync<List<ShoppingCartModel>>(
+                            "https://localhost:7158/api/ShoppingCart/" + $"{viewModel.UserId}" + "?key=Banana");
+
+                        foreach (var cart in cartFromApi)
+                        {
+                            if (cart.ProductId == model.Product.Id)
+                                await Add(cart.CartId);
+                        }
                     }
 
                 }
