@@ -72,9 +72,7 @@ namespace Assignment.WebApi.Controllers
                 _context.Categories.Add(createCategory);
                 await _context.SaveChangesAsync();
 
-                var addedCategory = await _context.Categories.FirstOrDefaultAsync(x => x.Id == createCategory.Id);
-
-                return CreatedAtAction("GetCategory", new { id = createCategory.Id }, new CategoryModel(addedCategory.Id, addedCategory.Name));
+                return CreatedAtAction("GetCategory", new { id = createCategory.Id }, new CategoryModel(createCategory.Id, createCategory.Name));
             }
 
             return BadRequest();

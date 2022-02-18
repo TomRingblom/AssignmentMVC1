@@ -73,9 +73,7 @@ namespace Assignment.WebApi.Controllers
                 _context.SubCategories.Add(createSubCategory);
                 await _context.SaveChangesAsync();
 
-                var addedSubCategory = await _context.SubCategories.FirstOrDefaultAsync(x => x.Id == createSubCategory.Id);
-
-                return CreatedAtAction("GetSubCategory", new { id = createSubCategory.Id }, new SubCategoryModel(addedSubCategory.Id, addedSubCategory.Name, addedSubCategory.CategoryId));
+                return Ok(createSubCategory);
             }
 
             return BadRequest();

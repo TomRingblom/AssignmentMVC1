@@ -88,9 +88,7 @@ namespace Assignment.WebApi.Controllers
                 _context.Products.Add(createProduct);
                 await _context.SaveChangesAsync();
 
-                var addedProduct = await _context.Products.Include(x => x.SubCategory.Category).FirstOrDefaultAsync(x => x.Id == createProduct.Id);
-
-                return CreatedAtAction("GetProduct", new { id = createProduct.Id }, new ProductModel(addedProduct.Id, addedProduct.Name, addedProduct.Description, addedProduct.Price, addedProduct.SubCategoryId, addedProduct.SubCategory.Category.Name, addedProduct.SubCategory.Name));
+                return Ok(createProduct);
             }
 
             return BadRequest();

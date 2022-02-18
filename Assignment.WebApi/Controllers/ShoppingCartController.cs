@@ -127,9 +127,7 @@ namespace Assignment.WebApi.Controllers
                 _context.ShoppingCarts.Add(createShoppingCart);
                 await _context.SaveChangesAsync();
 
-                var addedShoppingCart = await _context.ShoppingCarts.FirstOrDefaultAsync(x => x.Id == createShoppingCart.Id);
-
-                return CreatedAtAction("GetShoppingCartDetails", new { id = createShoppingCart.Id }, new ShoppingCartModel(addedShoppingCart.Id, addedShoppingCart.ProductId, addedShoppingCart.Count, addedShoppingCart.UserId, addedShoppingCart.Price));
+                return Ok(createShoppingCart);
             }
 
             return BadRequest();

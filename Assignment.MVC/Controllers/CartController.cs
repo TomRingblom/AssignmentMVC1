@@ -109,5 +109,14 @@ namespace Assignment.MVC.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> Sub(int cartId)
+        {
+            using (var client = new HttpClient())
+            {
+                await client.PutAsJsonAsync("https://localhost:7158/api/ShoppingCart/SubOneToCart?id=" + $"{cartId}" + "&key=Banana", cartId);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
